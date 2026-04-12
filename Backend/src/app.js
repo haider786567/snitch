@@ -5,7 +5,9 @@ import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import cookieParser from 'cookie-parser';
 import authRouter from './routes/auth.routes.js';
 import config from './config/config.js';
+import morgan from 'morgan';
 const app = express();
+app.use(morgan('dev'));
 app.use(passport.initialize());
 
 passport.use(new GoogleStrategy({
