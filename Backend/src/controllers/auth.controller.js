@@ -5,6 +5,7 @@ import config  from "../config/config.js";
 export const SendTokenResponse = (user,res,message) => {
     const token = jwt.sign({
         id: user._id,
+        role: user.role
     },config.JWT_SECRET,{
         expiresIn: "7d",
     });
@@ -46,7 +47,7 @@ export const register = async (req, res) => {
         await SendTokenResponse(user,res,"User registered successfully");
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: "Server error" });
+        res.status(500).json({ message: error.message });
     }
 }   
 export const login = async (req, res) => {
