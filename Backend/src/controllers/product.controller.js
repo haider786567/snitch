@@ -32,4 +32,12 @@ export async function createProduct(req,res){
 
 
 }
+export async function getSellerProducts(req,res){
+    const seller = req.user;
+    const products = await productModel.find({seller: seller.id});
+    res.status(200).json({
+        success: true,
+        products
+        })
+}
 
