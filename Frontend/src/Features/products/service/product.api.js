@@ -24,3 +24,23 @@ export const createProduct = async (productData)=>{
         throw error;
     }
 }
+export async function getAllProducts(){
+    try{
+        const response = await ProductApiInstance.get("/");
+        return response.data;
+    }catch(error){
+        console.error("Error fetching products:", error.message);
+        throw error;
+    }
+}
+export async function getProductById(productId ){
+    try{
+        const response = await ProductApiInstance.get(`/detail/${productId}`);
+        console.log(response.data);
+        
+        return response.data;
+    }catch(error){
+        console.error("Error fetching product:", error.message);
+        throw error;
+    }
+}

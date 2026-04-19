@@ -4,11 +4,14 @@ import Login from "../Features/auth/pages/Login.jsx";
 import SellerCreatePage from "../Features/products/pages/SellerCreatePage.jsx";
 import Dashboard from "../Features/products/pages/Dashboard.jsx";
 import Protected from "../Features/auth/component/Protected.jsx";
+import Home from "../Features/products/pages/Home.jsx";
+import ProductDetail from "../Features/products/pages/ProductDetail.jsx";
+import SellerProductDetails from "../Features/products/pages/SellerProductDetails.jsx";
 
 export const routes = createBrowserRouter([
     {
         path: "/",
-        element: <h1>Hello world</h1>,
+        element: <Home />,
     },
     {
         path: "/register",
@@ -17,6 +20,10 @@ export const routes = createBrowserRouter([
     {
         path: "/login",
         element: <Login />,
+    },
+    {
+        path: "/product/:id",
+        element: <ProductDetail />
     },
     {
         path:"/seller",
@@ -28,6 +35,12 @@ export const routes = createBrowserRouter([
             {
                 path:"/seller/dashboard",
                 element:<Protected role="seller"><Dashboard /></Protected>
+            },
+            {
+                path: "/seller/product/:productId",
+                element: <Protected role="seller" >
+                    <SellerProductDetails />
+                </Protected>
             }
         ]
     }
