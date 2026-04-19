@@ -1,5 +1,5 @@
 import { setSellerProducts,setProducts } from "../state/product.slice";
-import { getSellerProducts , createProduct ,getAllProducts,getProductById} from "../service/product.api";
+import { getSellerProducts , createProduct ,getAllProducts,deleteProduct,getProductById,addProductVariant} from "../service/product.api";
 import { useDispatch } from "react-redux";
 
 export const useProduct = ()=>{
@@ -30,6 +30,15 @@ export const useProduct = ()=>{
             console.error("Error fetching products:", error.message);
         }   
     }
+    const handleDeleteProduct = async (productId)=>{
+        try{
+            const data = await deleteProduct(productId);
+            return data.message;
+        }catch(error){
+            console.error("Error deleting product:", error.message);
+            throw error;
+        }
+    }
 
     const handlegetProductById = async (id)=>{
         try{
@@ -41,10 +50,22 @@ export const useProduct = ()=>{
         }
     }
 
+    const handleAddProductVariant = async (productId, newProductVariant) => {
+        try {
+            const data = await addProductVariant(productId, newProductVariant);
+            return data.product;
+        } catch (error) {
+            console.error("Error adding product variant:", error.message);
+            throw error;
+        }
+    }
+
     return {
         fetchSellerProducts,
         createProductHandler,
         fetchAllProducts,
-        handlegetProductById
+        handleDeleteProduct,
+        handlegetProductById,   
+        handleAddProductVariant
     }
 }   

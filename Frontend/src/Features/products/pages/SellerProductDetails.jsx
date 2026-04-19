@@ -24,12 +24,12 @@ const SellerProductDetails = () => {
   });
 
   const { productId } = useParams();
-  const { handleGetProductById, handleAddProductVariant } = useProduct();
+  const { handlegetProductById, handleAddProductVariant } = useProduct();
 
   async function fetchProductDetails() {
     setLoading(true);
     try {
-      const data = await handleGetProductById(productId);
+      const data = await handlegetProductById(productId);
       const prod = data?.product || data;
       setProduct(prod);
       // Initialize variants locally

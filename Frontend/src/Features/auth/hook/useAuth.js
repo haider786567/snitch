@@ -20,7 +20,6 @@ export const useAuth = () => {
 
         const data = await login({ email, password })
         dispatch(setUser(data.user))
-        console.log(data.user);
         return data.user
         
     }
@@ -30,6 +29,7 @@ export const useAuth = () => {
             dispatch(setLoading(true))
             const data = await getMe()
             dispatch(setUser(data.user))
+            return data.user
         } catch (err) {
             console.log(err)
         } finally {

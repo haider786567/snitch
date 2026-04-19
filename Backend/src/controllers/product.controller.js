@@ -49,6 +49,25 @@ export async function getAllProducts(req, res) {
         products
     })
 }
+export async function deleteProduct(req,res){
+    const {id} = req.params;
+    const seller = req.user;
+    const product = await productModel.findOneAndDelete({
+        _id: id,
+        seller: seller.id
+    });
+    if(!product){
+        return res.status(404).json({
+            success: false,
+            message: "Product not found or you are not authorized to delete this product"
+        })
+    }
+    res.status(200).json({
+        success: true,
+        message: "Product deleted successfully"
+    })  
+
+}
 
 export async function getProductById(req, res) {
     const { id } = req.params;
@@ -74,12 +93,14 @@ export async function getProductById(req, res) {
     }
 }
 export async function addProductVariant(req, res) {
-
-    const productId = req.params.productId;
+    const { productId } = req.params;
+    console.log(req.user);
+    
 
     const product = await productModel.findOne({
         _id: productId,
-        seller: req.user._id
+        seller: req.user.id
+        
     });
 
     if (!product) {
@@ -93,7 +114,7 @@ export async function addProductVariant(req, res) {
     const images = [];
     if (files || files.length !== 0) {
         (await Promise.all(files.map(async (file) => {
-            const image = await uploadFile({
+            const image = await UploadImage({
                 buffer: file.buffer,
                 fileName: file.originalname
             })
@@ -101,7 +122,7 @@ export async function addProductVariant(req, res) {
         }))).map(image => images.push(image))
     }
 
-    const price = req.body.priceAmount
+    const price = req.body.priceAmount || product.price.amount
     const stock = req.body.stock
     const attributes = JSON.parse(req.body.attributes || "{}")
 
@@ -126,4 +147,51 @@ export async function addProductVariant(req, res) {
     })
 
 }
+export async function updateProductVariant(req, res) {
+    const { productId, variantId } = req.params;
+    const product = await productModel.findOne({
+        _id: productId,
+        seller: req.user.id
+    })
+    const variant = product.variants.id(variantId);
 
+    if (!variant) {
+        return res.status(404).json({
+            message: "Product variant not found",
+            success: false
+        })
+    }
+    
+    const files = req.files;
+    const images = [];
+    if (files || files.length !== 0) {
+        (await Promise.all(files.map(async (file) => {
+            const image = await UploadImage({
+                buffer: file.buffer,
+                fileName: file.originalname
+            })
+            return image
+        }))).map(image => images.push(image))
+    }
+
+    const price = req.body.priceAmount || variant.price.amount
+    const stock = req.body.stock || variant.stock
+    const attributes = JSON.parse(req.body.attributes || "{}")
+
+    variant.images.push(...images);
+    variant.price = {
+        amount: Number(price) || variant.price.amount,
+        currency: req.body.priceCurrency || variant.price.currency
+    }
+    variant.stock = stock;
+    variant.attributes = attributes;
+
+    await product.save();
+
+    return res.status(200).json({
+        message: "Product variant updated successfully",
+        success: true,
+        product
+    })
+
+}

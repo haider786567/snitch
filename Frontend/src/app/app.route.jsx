@@ -37,7 +37,7 @@ export const routes = createBrowserRouter([
                 element:<Protected role="seller"><Dashboard /></Protected>
             },
             {
-                path: "/seller/product/:productId",
+                path: "/seller/products/:productId",
                 element: <Protected role="seller" >
                     <SellerProductDetails />
                 </Protected>

@@ -33,6 +33,15 @@ export async function getAllProducts(){
         throw error;
     }
 }
+export async function deleteProduct(productId){
+    try{
+        const response = await ProductApiInstance.delete(`/delete/${productId}`);
+        return response.data;
+    }catch(error){
+        console.error("Error deleting product:", error.message);
+        throw error;
+    }
+}
 export async function getProductById(productId ){
     try{
         const response = await ProductApiInstance.get(`/detail/${productId}`);
@@ -44,3 +53,24 @@ export async function getProductById(productId ){
         throw error;
     }
 }
+
+export async function addProductVariant(productId, newProductVariant) {
+
+    console.log(newProductVariant)
+
+    const formData = new FormData()
+
+    newProductVariant.images.forEach((image) => {
+        formData.append(`images`, image.file)
+    })
+
+    formData.append("stock", newProductVariant.stock)
+    formData.append("priceAmount", newProductVariant.price)
+    formData.append("attributes", JSON.stringify(newProductVariant.attributes))
+
+    const response = await ProductApiInstance.post(`/${productId}/variants`, formData)
+
+    return response.data
+
+}
+ 

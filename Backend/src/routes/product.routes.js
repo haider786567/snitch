@@ -1,7 +1,7 @@
 import express from 'express';
 import { Router } from 'express';
 import { authSeller } from '../middleware/auth.middleware.js';
-import { createProduct ,getSellerProducts,getAllProducts,getProductById,addProductVariant} from '../controllers/product.controller.js';
+import { createProduct ,getSellerProducts,getAllProducts,deleteProduct,getProductById,addProductVariant,updateProductVariant} from '../controllers/product.controller.js';
 import { createProductValidator } from '../validators/product.validator.js';
 import multer from 'multer';
 import { get } from 'mongoose';
@@ -16,8 +16,10 @@ const upload = multer({
 router.post('/create',authSeller,upload.array('images', 7),createProductValidator,createProduct);
 router.get('/seller',authSeller,getSellerProducts);
 router.get("/",getAllProducts);
+router.delete("/delete/:id",authSeller,deleteProduct);
 router.get("/detail/:id",getProductById);
 router.post("/:productId/variants", authSeller, upload.array('images', 7), addProductVariant)
+router.patch("/:productId/variants/:variantId", authSeller, upload.array('images', 7), updateProductVariant)
 
 
 export default router;

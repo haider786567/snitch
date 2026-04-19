@@ -4,13 +4,13 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 const Dashboard = () => {
-    const { fetchSellerProducts } = useProduct();
+    const { fetchSellerProducts,handleDeleteProduct } = useProduct();
     const sellerProducts = useSelector(state => state.product.sellerProducts);
     const navigate = useNavigate();
 
     useEffect(() => {
         fetchSellerProducts();
-    }, []);
+    }, [fetchSellerProducts]);
 
     return (
         <>
@@ -89,14 +89,27 @@ const Dashboard = () => {
                                     : '/snitch_editorial_warm.png'; // Fallback to our warm editorial
 
                                 return (
-                                    <div key={product._id} className="group cursor-pointer flex flex-col">
+                                    <div onClick={() => navigate(`/seller/products/${product._id}`)} key={product._id} className="group cursor-pointer flex flex-col relative">
                                         {/* Image Container */}
-                                        <div className="aspect-[4/5] overflow-hidden mb-6" style={{ backgroundColor: '#f5f3f0' }}>
+                                        <div className="relative aspect-4/5 overflow-hidden mb-6" style={{ backgroundColor: '#f5f3f0' }}>
                                             <img
                                                 src={imageUrl}
                                                 alt={product.title}
                                                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                                             />
+                                            {/* Delete Button */}
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleDeleteProduct(product._id);
+                                                }}
+                                                className="absolute top-4 right-4 bg-[#fbf9f6]/90 hover:bg-red-600 hover:text-white text-[#1b1c1a] p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 z-10 shadow-sm"
+                                                aria-label="Delete product"
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                </svg>
+                                            </button>
                                         </div>
 
                                         {/* Product Details */}
