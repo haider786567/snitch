@@ -73,4 +73,3 @@ export async function addProductVariant(productId, newProductVariant) {
     return response.data
 
 }
- 
