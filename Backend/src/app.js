@@ -5,7 +5,7 @@ import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import cookieParser from 'cookie-parser';
 import authRouter from './routes/auth.routes.js';
 import productRouter from '../src/routes/product.routes.js'
-import cartRouter from '../src/routes/cart.routes.js'
+import cartRouter from "../src/routes/cart.routes.js"
 import config from './config/config.js';
 import morgan from 'morgan';
 const app = express();

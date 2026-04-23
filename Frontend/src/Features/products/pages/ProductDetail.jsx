@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, Link, useNavigate } from 'react-router';
 import { useProduct } from '../hooks/useProduct';
+import { useCart } from '../../cart/hooks/useCart';
 
 const ProductDetail = () => {
     const { id: productId } = useParams();
@@ -9,6 +10,8 @@ const ProductDetail = () => {
     const [ selectedAttributes, setSelectedAttributes ] = useState({});
     const navigate = useNavigate();
     const { handlegetProductById } = useProduct();
+    const { handleAddItem } = useCart();
+
 
     useEffect(() => {
         async function fetchProductDetails() {
@@ -257,6 +260,8 @@ const ProductDetail = () => {
                             {/* Actions */}
                             <div className="flex flex-col gap-4 mt-auto">
                                 <button
+
+                                
                                     className="w-full py-4 text-[11px] uppercase tracking-[0.25em] font-medium transition-all duration-300"
                                     style={{
                                         backgroundColor: '#1b1c1a',
@@ -270,6 +275,12 @@ const ProductDetail = () => {
                                     onMouseLeave={e => {
                                         e.currentTarget.style.backgroundColor = '#1b1c1a';
                                         e.currentTarget.style.color = '#fbf9f6';
+                                    }}
+                                    onClick={()=>{
+                                        handleAddItem({
+                                            productId:product._id,
+                                            variantId:activeVariant._id
+                                        })
                                     }}
                                 >
                                     Add to Cart
