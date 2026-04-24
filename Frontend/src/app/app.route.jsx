@@ -8,12 +8,9 @@ import Home from "../Features/products/pages/Home.jsx";
 import ProductDetail from "../Features/products/pages/ProductDetail.jsx";
 import SellerProductDetails from "../Features/products/pages/SellerProductDetails.jsx";
 import Cart from "../Features/cart/pages/cart.jsx";
+import AppLayout from "../app/AppLayout.jsx";
 
 export const routes = createBrowserRouter([
-    {
-        path: "/",
-        element: <Home />,
-    },
     {
         path: "/register",
         element: <Register />,
@@ -23,8 +20,15 @@ export const routes = createBrowserRouter([
         element: <Login />,
     },
     {
+        element: <AppLayout />,
+        children:[
+            {
         path: "/product/:id",
         element: <ProductDetail />
+        },
+        {
+        path: "/",
+        element: <Home />,
     },
     {
         path: "/cart",
@@ -50,4 +54,7 @@ export const routes = createBrowserRouter([
             }
         ]
     }
+        ]
+    }
+
 ])

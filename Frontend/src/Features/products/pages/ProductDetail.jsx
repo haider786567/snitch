@@ -118,7 +118,7 @@ const ProductDetail = () => {
                 className="min-h-screen selection:bg-[#C9A96E]/30 pb-24"
                 style={{ backgroundColor: '#fbf9f6', fontFamily: "'Inter', sans-serif" }}
             >
-                {/* ── Navbar ── */}
+                {/* ── Navbar ──
                 <nav className="px-8 lg:px-16 xl:px-24 pt-10 pb-6 flex items-center justify-between border-b" style={{ borderColor: '#e4e2df' }}>
                     <Link to="/"
                         className="text-sm font-medium tracking-[0.35em] uppercase hover:opacity-80 transition-opacity"
@@ -133,7 +133,7 @@ const ProductDetail = () => {
                     >
                         Return to Archive
                     </button>
-                </nav>
+                </nav> */}
 
                 <div className="max-w-7xl mx-auto px-8 lg:px-16 xl:px-24 pt-12 lg:pt-20">
                     <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 items-start">

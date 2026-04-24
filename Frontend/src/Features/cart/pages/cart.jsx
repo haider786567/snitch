@@ -180,6 +180,8 @@ const Cart = () => {
                                     const variantDetail = getVariantDetails(product, variantId)
                                     const imageUrl = getDisplayImage(product, variantDetail)
                                     const displayPrice = price ?? variantDetail?.price ?? product?.price
+                                    console.log(displayPrice.amount);
+                                    
                                     const qty = quantities[ _id ] ?? item.quantity ?? 1
                                     const attributes = variantDetail?.attributes ?? {}
                                     const stock = variantDetail?.stock
