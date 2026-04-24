@@ -22,7 +22,7 @@ const tokens = {
 
 const Cart = () => {
     const cart = useSelector(state => state.cart)
-    const { handleGetCart, handleIncrementCartItem } = useCart()
+    const { handleGetCart, handleIncrementCartItem, handleDecrementCartItem, handleRemoveCartItem } = useCart()
     const navigate = useNavigate()
 
     /* Local quantity state — key: cartItem._id, value: number */
@@ -290,7 +290,7 @@ const Cart = () => {
                                                     >
                                                         <button
                                                             id={`qty-dec-${_id}`}
-                                                            onClick={() => changeQty(_id, -1)}
+                                                            onClick={() => handleDecrementCartItem({ productId: _id, variantId })}
                                                             className="w-9 h-9 flex items-center justify-center text-sm font-light transition-colors hover:opacity-60"
                                                             style={{ color: tokens.onSurface, borderRight: `1px solid ${tokens.outlineVariant}` }}
                                                             aria-label="Decrease quantity"
@@ -303,6 +303,7 @@ const Cart = () => {
                                                         >
                                                             {qty}
                                                         </span>
+                                                    
                                                         <button
                                                             id={`qty-inc-${_id}`}
                                                             onClick={() => handleIncrementCartItem({ productId: _id, variantId })}
@@ -319,6 +320,7 @@ const Cart = () => {
                                                         id={`remove-${_id}`}
                                                         className="text-[10px] uppercase tracking-[0.22em] font-medium transition-all duration-200 hover:underline hover:opacity-70"
                                                         style={{ color: tokens.muted }}
+                                                        onClick={() => handleRemoveCartItem({ productId: _id, variantId })}
                                                     >
                                                         Remove
                                                     </button>
