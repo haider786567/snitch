@@ -18,6 +18,8 @@ export const addItem = async ({ productId, variantId }) => {
 export const getCart = async () => {
     try {
         const response = await cartApiInstance.get('/get')
+        
+        
         return response.data
     } catch (error) {
         throw error.response.data

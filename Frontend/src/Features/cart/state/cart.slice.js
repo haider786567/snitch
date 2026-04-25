@@ -10,8 +10,8 @@ const cartSlice = createSlice({
     },
     reducers: {
         setCart: (state, action) => {
-            state.items = action.payload.items;
-            state.totalPrice = action.payload.totalPrice;
+            state.items = action.payload.items || [];
+            state.totalPrice = action.payload.totalPrice || 0;
             state.currency = action.payload.currency;
         },
         addItem: (state, action) => {
@@ -20,29 +20,45 @@ const cartSlice = createSlice({
         incrementCartItem: (state, action) => {
             const { productId, variantId } = action.payload
 
-            state.items = state.items.map(item => {
+            state.items.forEach(item => {
                 if (item.product._id === productId && item.variant === variantId) {
-                    return { ...item, quantity: item.quantity + 1 }
-                } else {
-                    return item
+                    item.quantity += 1;
+                    const priceObj = item.price || item.product?.variants?.price || item.product?.price;
+                    const amount = priceObj?.amount || 0;
+                    state.totalPrice += amount;
                 }
-            })
+            });
         },
         decrementCartItem: (state, action) => {
             const { productId, variantId } = action.payload
 
-            state.items = state.items.map(item => {
-                if (item.product._id === productId && item.variant === variantId) {
-                    return { ...item, quantity: item.quantity - 1 }
+            const index = state.items.findIndex(item => item.product._id === productId && item.variant === variantId);
+            if (index !== -1) {
+                const item = state.items[index];
+                if (item.quantity > 1) {
+                    item.quantity -= 1;
+                    const priceObj = item.price || item.product?.variants?.price || item.product?.price;
+                    const amount = priceObj?.amount || 0;
+                    state.totalPrice -= amount;
                 } else {
-                    return item
+                    const priceObj = item.price || item.product?.variants?.price || item.product?.price;
+                    const amount = priceObj?.amount || 0;
+                    state.totalPrice -= amount;
+                    state.items.splice(index, 1);
                 }
-            }).filter(item => item.quantity > 0)
+            }
         },
         removeCartItem: (state, action) => {
             const { productId, variantId } = action.payload
 
-            state.items = state.items.filter(item => !(item.product._id === productId && item.variant === variantId))
+            const index = state.items.findIndex(item => item.product._id === productId && item.variant === variantId);
+            if (index !== -1) {
+                const item = state.items[index];
+                const priceObj = item.price || item.product?.variants?.price || item.product?.price;
+                const amount = priceObj?.amount || 0;
+                state.totalPrice -= (amount * item.quantity);
+                state.items.splice(index, 1);
+            }
         }
     }
 })

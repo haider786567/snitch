@@ -6,7 +6,7 @@ import { Navigate } from 'react-router'
 const Protected = ({ children , role = "buyer" }) => {
     const user = useSelector(state => state.auth.user)
     const loading = useSelector(state => state.auth.loading)
-    console.log(user);
+   
     
     
     if (loading) {

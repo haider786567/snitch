@@ -25,23 +25,11 @@ const Cart = () => {
     const { handleGetCart, handleIncrementCartItem, handleDecrementCartItem, handleRemoveCartItem } = useCart()
     const navigate = useNavigate()
 
-    /* Local quantity state — key: cartItem._id, value: number */
-    const [ quantities, setQuantities ] = useState({})
-
     useEffect(() => {
         handleGetCart()
     }, [])
 
-    console.log(cart)
-
-
-
-    const changeQty = (id, delta) => {
-        setQuantities(prev => ({
-            ...prev,
-            [ id ]: Math.max(1, (prev[ id ] ?? 1) + delta),
-        }))
-    }
+    
 
 
 
@@ -74,25 +62,7 @@ const Cart = () => {
                     style={{ backgroundColor: tokens.surface, fontFamily: "'Inter', sans-serif" }}
                 >
                     {/* Nav */}
-                    <nav
-                        className="px-8 lg:px-16 xl:px-24 pt-10 pb-6 flex items-center justify-between"
-                        style={{ borderBottom: `1px solid ${tokens.surfaceHighest}` }}
-                    >
-                        <Link
-                            to="/"
-                            className="text-sm font-medium tracking-[0.35em] uppercase hover:opacity-80 transition-opacity"
-                            style={{ fontFamily: "'Cormorant Garamond', serif", color: tokens.primary }}
-                        >
-                            Snitch.
-                        </Link>
-                        <button
-                            onClick={() => navigate(-1)}
-                            className="text-[10px] uppercase tracking-[0.22em] font-medium transition-colors hover:opacity-70"
-                            style={{ color: tokens.secondary }}
-                        >
-                            Return to Archive
-                        </button>
-                    </nav>
+                    
 
                     <div className="flex-1 flex flex-col items-center justify-center gap-6 pb-24 px-8">
                         <p
@@ -176,16 +146,22 @@ const Cart = () => {
                             {/* ── Cart Item List ── */}
                             <div className="flex flex-col gap-6">
                                 {cart.items.map(item => {
-                                    const { product, variant: variantId, price, product: { _id } } = item
+                            
+                                    const { product, variant: variantId,  product: { _id } } = item
                                     const variantDetail = getVariantDetails(product, variantId)
                                     const imageUrl = getDisplayImage(product, variantDetail)
-                                    const displayPrice = price ?? variantDetail?.price ?? product?.price
-                                    console.log(displayPrice.amount);
+                                    const displayPrice = variantDetail.price.amount
+                                    console.log(variantDetail);
+                                    console.log(displayPrice);
                                     
-                                    const qty = quantities[ _id ] ?? item.quantity ?? 1
+                                    
+                                
+                                    
+                                    const qty = item.quantity ?? 1
                                     const attributes = variantDetail?.attributes ?? {}
                                     const stock = variantDetail?.stock
                                     const variantPrice = variantDetail?.price
+                                    console.log(variantPrice)
 
 
                                     return (
@@ -256,7 +232,7 @@ const Cart = () => {
                                                         style={{ color: tokens.onSurface }}
                                                     >
                                                         {displayPrice
-                                                            ? formatCurrency(displayPrice.amount, displayPrice.currency)
+                                                            ? formatCurrency(displayPrice, displayPrice.currency)
                                                             : '—'}
                                                     </p>
 
@@ -270,9 +246,9 @@ const Cart = () => {
                                                         </p>
                                                     )}
                                                     {
-                                                        displayPrice.amount !== variantPrice.amount && (
+                                                        displayPrice !== variantPrice.amount && (
                                                             <>
-                                                                {displayPrice.amount > variantPrice.amount
+                                                                {displayPrice > variantPrice.amount
                                                                     ? <p className="text-[10px] uppercase tracking-[0.15em] mb-4 text-green-800 font-bold" > you will get this at {formatCurrency(variantPrice.amount, variantPrice.currency)} save {Math.abs(variantPrice.amount - displayPrice.amount)}.  </p>
                                                                     : <p className="text-[10px] uppercase tracking-[0.15em] mb-4 text-red-600 font-bold" > Warning this product will cost you {Math.abs(variantPrice.amount - displayPrice.amount)} more.  </p>
                                                                 }
