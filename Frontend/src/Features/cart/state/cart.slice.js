@@ -23,7 +23,7 @@ const cartSlice = createSlice({
             state.items.forEach(item => {
                 if (item.product._id === productId && item.variant === variantId) {
                     item.quantity += 1;
-                    const priceObj = item.price || item.product?.variants?.price || item.product?.price;
+                    const priceObj = item.product?.variants?.price || item.product?.price;
                     const amount = priceObj?.amount || 0;
                     state.totalPrice += amount;
                 }
@@ -37,11 +37,11 @@ const cartSlice = createSlice({
                 const item = state.items[index];
                 if (item.quantity > 1) {
                     item.quantity -= 1;
-                    const priceObj = item.price || item.product?.variants?.price || item.product?.price;
+                    const priceObj = item.product?.variants?.price || item.product?.price;
                     const amount = priceObj?.amount || 0;
                     state.totalPrice -= amount;
                 } else {
-                    const priceObj = item.price || item.product?.variants?.price || item.product?.price;
+                    const priceObj = item.product?.variants?.price || item.product?.price;
                     const amount = priceObj?.amount || 0;
                     state.totalPrice -= amount;
                     state.items.splice(index, 1);

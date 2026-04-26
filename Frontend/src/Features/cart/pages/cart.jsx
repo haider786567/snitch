@@ -151,17 +151,11 @@ const Cart = () => {
                                     const variantDetail = getVariantDetails(product, variantId)
                                     const imageUrl = getDisplayImage(product, variantDetail)
                                     const displayPrice = variantDetail.price.amount
-                                    console.log(variantDetail);
-                                    console.log(displayPrice);
-                                    
-                                    
-                                
-                                    
                                     const qty = item.quantity ?? 1
                                     const attributes = variantDetail?.attributes ?? {}
                                     const stock = variantDetail?.stock
                                     const variantPrice = variantDetail?.price
-                                    console.log(variantPrice)
+                                    
 
 
                                     return (
