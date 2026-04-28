@@ -38,3 +38,17 @@ export const removeCartItemApi = async ({ productId, variantId }) => {
     const response = await cartApiInstance.delete(`/remove/${productId}/${variantId}`)
     return response.data
 }
+
+export const createOrderApi = async () => {
+    const response = await cartApiInstance.post('/payment/create/order')
+    return response.data
+}
+export const verifyCartOrder = async ({ razorpay_order_id, razorpay_payment_id, razorpay_signature }) => {
+    const response = await cartApiInstance.post("/payment/verify/order", {
+        razorpay_order_id,
+        razorpay_payment_id,
+        razorpay_signature
+    })
+
+    return response.data
+}

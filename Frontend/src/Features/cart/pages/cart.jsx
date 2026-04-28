@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useCart } from '../hooks/useCart'
 import { Link, useNavigate } from 'react-router'
+import { useRazorpay } from "react-razorpay";
 
 /* ─── Inline styles & tokens matching the "Avenue Montaigne" design system ─── */
 const tokens = {
@@ -22,8 +23,10 @@ const tokens = {
 
 const Cart = () => {
     const cart = useSelector(state => state.cart)
-    const { handleGetCart, handleIncrementCartItem, handleDecrementCartItem, handleRemoveCartItem } = useCart()
+    const { handleGetCart, handleIncrementCartItem, handleDecrementCartItem, handleRemoveCartItem ,handleCreateOrder,handleVerifyOrder} = useCart()
     const navigate = useNavigate()
+    const { error, isLoading, Razorpay } = useRazorpay();
+    const user = useSelector(state => state.user)
 
     useEffect(() => {
         handleGetCart()
@@ -44,14 +47,49 @@ const Cart = () => {
         if (product?.images?.length) return product.images[ 0 ].url
         return null
     }
+    
 
     const formatCurrency = (amount, currency = 'INR') =>
         `${currency} ${Number(amount).toLocaleString('en-IN')}`
 
+    async function handleCheckout() {
+        const order = await handleCreateOrder()
+        console.log(order)
+
+
+        const options = {
+            key: "rzp_test_SidmKk6TBsEQJ0",
+            amount: order.amount, // Amount in paise
+            currency: order.currency,
+            name: "Snitch",
+            description: "Test Transaction",
+            order_id: order.id, // Generate order_id on server
+            handler: async (response) => {
+
+                const isValid = await handleVerifyOrder(response)
+
+                if (isValid) {
+                    navigate(`/order-success?order_id=${response?.razorpay_order_id}`)
+                }
+            },
+            prefill: {
+                name: user?.fullname,
+                email: user?.email,
+                contact: user?.contact,
+            },
+            theme: {
+                color: tokens.primary,
+            },
+        };
+
+        const razorpayInstance = new Razorpay(options);
+        razorpayInstance.open();
+    }
+
 
     /* ─── Empty state ─── */
     if (!cart?.items?.length) {
-        return (
+    return(
             <>
                 <link
                     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap"
@@ -427,6 +465,7 @@ const Cart = () => {
                                         e.currentTarget.style.backgroundColor = tokens.onSurface
                                         e.currentTarget.style.color = tokens.surface
                                     }}
+                                    onClick={handleCheckout}
                                 >
                                     Proceed to Checkout
                                 </button>
